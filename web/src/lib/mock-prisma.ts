@@ -13,6 +13,9 @@ import {
   type Review
 } from './mock-data';
 
+// Exportar os tipos
+export type { User, Category, Product, Order, OrderItem, Review };
+
 // Simulação de sessão atual (em produção seria do NextAuth)
 let currentUser: User | null = null;
 
