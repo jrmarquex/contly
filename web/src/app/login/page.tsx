@@ -62,7 +62,7 @@ export default function LoginPage() {
             <div className="relative">
               <Image 
                 src="/images/logo.png" 
-                alt="A definir Logo" 
+                alt="Contly Logo" 
                 width={120}
                 height={120}
                 className="object-contain"
