@@ -8,7 +8,7 @@ coverage/
 
 # Next.js
 .next/
-out/
+# out/ (temporariamente permitido para GitHub Pages)
 build
 dist/
 
