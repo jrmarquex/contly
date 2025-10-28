@@ -3,6 +3,10 @@ const nextConfig = {
   // Export estático para GitHub Pages
   output: 'export',
   
+  // Configurar para GitHub Pages
+  basePath: '',
+  assetPrefix: '',
+  
   // Desabilitar verificação de tipos no build
   typescript: {
     ignoreBuildErrors: true,
