@@ -3,9 +3,9 @@ const nextConfig = {
   // Export estático para GitHub Pages
   output: 'export',
   
-  // Configurar para GitHub Pages (sem basePath)
-  basePath: '',
-  assetPrefix: '',
+  // Configurar para GitHub Pages (com basePath do repositório)
+  basePath: '/contly',
+  assetPrefix: '/contly',
   
   // Desabilitar verificação de tipos no build
   typescript: {
