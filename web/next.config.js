@@ -3,7 +3,7 @@ const nextConfig = {
   // Export estático para GitHub Pages
   output: 'export',
   
-  // Configurar para GitHub Pages
+  // Configurar para GitHub Pages (sem basePath)
   basePath: '',
   assetPrefix: '',
   
