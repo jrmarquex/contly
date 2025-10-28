@@ -1,0 +1,143 @@
+import Link from "next/link";
+import Image from "next/image";
+import { formatBRL } from "@/lib/currency";
+import { getCategoryIcon } from "@/lib/category-icons";
+
+type Product = {
+  id: string;
+  title: string;
+  slug: string;
+  price: number;
+  compareAtPrice?: number | null;
+  status: "AVAILABLE" | "OUT_OF_STOCK";
+  category: string;
+};
+
+type ProductGridProps = {
+  title: string;
+  products: Product[];
+};
+
+export function ProductGrid({ title, products }: ProductGridProps) {
+  return (
+    <section className="space-y-6">
+      <div>
+        <h2 className="text-3xl font-bold mb-2">
+          <span className="text-white">Ativos para</span>
+          <span className="text-[var(--primary)] ml-2">{title}</span>
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products.map((product) => {
+          const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
+          const discountPct = hasDiscount ? Math.round(((product.compareAtPrice! - product.price) / product.compareAtPrice!) * 100) : 0;
+          
+          return (
+            <div key={product.id} className={`card-professional p-6 relative overflow-hidden group ${product.status === "OUT_OF_STOCK" ? 'opacity-60' : ''}`}>
+              {/* Out of Stock Overlay */}
+              {product.status === "OUT_OF_STOCK" && (
+                <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-20 rounded-2xl">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </div>
+                    <span className="text-white font-semibold text-lg">ESGOTADO</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Background Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 via-transparent to-[var(--accent)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+              {/* Product Icon */}
+              <div className="relative z-10 mb-4">
+                <div className="w-16 h-16 rounded-xl overflow-hidden group-hover:scale-110 transition-transform duration-300 border border-[var(--border)]">
+                  <Image 
+                    src={getCategoryIcon(title.toLowerCase().replace(' ', '-'))}
+                    alt={`${title} icon`}
+                    width={64}
+                    height={64}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+
+              {/* Brand Info */}
+              <div className="relative z-10 mb-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[var(--primary)] text-sm font-medium">Adsly</p>
+                    <p className="text-white font-semibold text-lg">Conta Matriz</p>
+                    <p className="text-[var(--muted-foreground)] text-sm">{title}▾</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Product Title */}
+              <div className="relative z-10 mb-4">
+                <Link href={`/produto/${product.slug}`} className={product.status === "OUT_OF_STOCK" ? "pointer-events-none" : ""}>
+                  <h3 className="text-white font-semibold text-sm leading-tight group-hover:text-[var(--primary)] transition-colors duration-300">
+                    {product.title}
+                  </h3>
+                </Link>
+              </div>
+
+              {/* Pricing */}
+              <div className="relative z-10 mb-4">
+                <div className="flex items-baseline gap-2 mb-1">
+                  <span className="text-[var(--primary)] font-bold text-xl">
+                    {formatBRL(product.price)}
+                  </span>
+                  {hasDiscount && (
+                    <>
+                      <span className="text-green-400 text-sm font-semibold">-{discountPct}%</span>
+                      <span className="line-through text-[var(--muted-foreground)] text-sm">
+                        {formatBRL(product.compareAtPrice!)}
+                      </span>
+                    </>
+                  )}
+                </div>
+                <p className="text-[var(--muted-foreground)] text-xs">À vista no Pix</p>
+              </div>
+
+              {/* Action Button */}
+              <div className="relative z-10">
+                <form action={`/api/orders/buy-now`} method="post">
+                  <input type="hidden" name="productId" value={product.id} />
+                  <button 
+                    disabled={product.status === "OUT_OF_STOCK"}
+                    className={`w-full px-4 py-3 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 ${
+                      product.status === "OUT_OF_STOCK" 
+                        ? 'bg-red-500/20 border border-red-500 text-red-400 cursor-not-allowed' 
+                        : 'btn-primary hover:scale-105'
+                    }`}
+                  >
+                    {product.status === "OUT_OF_STOCK" ? (
+                      <>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        Esgotado
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
+                        </svg>
+                        Comprar agora
+                      </>
+                    )}
+                  </button>
+                </form>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
