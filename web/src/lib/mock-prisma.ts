@@ -112,8 +112,11 @@ export const mockPrisma = {
       return products;
     },
     
-    findUnique: async (args: { where: { slug: string } }) => {
-      const product = mockProducts.find(p => p.slug === args.where.slug);
+    findUnique: async (args: { where: { slug?: string; id?: string } }) => {
+      const product = mockProducts.find(p => 
+        (args.where.slug && p.slug === args.where.slug) ||
+        (args.where.id && p.id === args.where.id)
+      );
       if (product) {
         const category = mockCategories.find(c => c.id === product.categoryId);
         const reviews = mockReviews.filter(r => r.productId === product.id);
