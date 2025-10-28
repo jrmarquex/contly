@@ -1,27 +1,27 @@
 import { mockPrisma } from "@/lib/mock-prisma";
 
 export default async function AvaliacoesPage() {
-  const reviews = await mockPrisma.review.findMany({
+  const reviewsData = await mockPrisma.review.findMany({
     include: {
       user: { select: { name: true, displayName: true } },
       product: { select: { title: true } }
     },
     orderBy: { createdAt: "desc" },
     take: 20
-  });
+  }) as any[];
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-semibold">Avaliações</h1>
 
-      {reviews.length === 0 ? (
+      {reviewsData.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-muted text-lg">Nenhuma avaliação encontrada</p>
           <p className="text-muted text-sm mt-2">As avaliações dos clientes aparecerão aqui</p>
         </div>
       ) : (
         <div className="space-y-4">
-          {reviews.map((review) => (
+          {reviewsData.map((review) => (
             <div key={review.id} className="border border-white/10 rounded-lg p-4">
               <div className="flex justify-between items-start mb-2">
                 <div>

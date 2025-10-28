@@ -25,7 +25,7 @@ export interface Product {
   description: string;
   price: number;
   compareAtPrice: number | null;
-  status: 'AVAILABLE' | 'OUT_OF_STOCK' | 'HIDDEN';
+  status: 'AVAILABLE' | 'OUT_OF_STOCK';
   categoryId: string;
   category: string;
   createdAt: Date;

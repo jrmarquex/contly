@@ -3,12 +3,20 @@ import { ProductCard } from "@/components/ProductCard";
 import { notFound } from "next/navigation";
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
+export async function generateStaticParams() {
+  const categories = await mockPrisma.category.findMany();
+  return categories.map((category) => ({
+    slug: category.slug,
+  }));
+}
+
 export default async function CategoryPage({ params }: Props) {
+  const { slug } = await params;
   const category = await mockPrisma.category.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
   });
 
   if (!category) {

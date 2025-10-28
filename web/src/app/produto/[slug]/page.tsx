@@ -4,12 +4,20 @@ import { ProductCard } from "@/components/ProductCard";
 import { notFound } from "next/navigation";
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
+export async function generateStaticParams() {
+  const products = await mockPrisma.product.findMany();
+  return products.map((product) => ({
+    slug: product.slug,
+  }));
+}
+
 export default async function ProductPage({ params }: Props) {
+  const { slug } = await params;
   const product = await mockPrisma.product.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
   });
 
   if (!product) {
