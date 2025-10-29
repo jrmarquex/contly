@@ -55,7 +55,7 @@ export function ProductCard({ id, title, slug, price, compareAtPrice, isOutOfSto
       <div className="relative z-10 mb-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[var(--primary)] text-sm font-medium">Adsly</p>
+            <p className="text-[var(--primary)] text-sm font-medium">Contly</p>
             <p className="text-white font-semibold text-lg">Conta Matriz</p>
             <p className="text-[var(--muted-foreground)] text-sm">Meta ADS▾</p>
           </div>
